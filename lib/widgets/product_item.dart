@@ -13,8 +13,6 @@ class ProductItem extends StatelessWidget {
 
   // ProductItem(this.id, this.title, this.imageUrl);
 
-  
-
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
@@ -32,16 +30,24 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(
+                product.imageUrl,
+              ),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
-              icon: (product.isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border)),
+              icon: (product.isFavorite
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_border)),
               color: Theme.of(context).accentColor,
               onPressed: () {
                 product.toggleFavoriteStatus(authData.token, authData.userId);
